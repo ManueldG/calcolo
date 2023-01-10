@@ -15,7 +15,8 @@ class App extends React.Component{
     this.handleResponse = this.handleResponse.bind(this);
     this.api = this.api.bind(this);
     this.state = {
-      result:'',      
+      result:'',  
+      value:''    
     }
 
   }
@@ -39,7 +40,12 @@ class App extends React.Component{
 
   handleResponse = (response)=>{
     console.log(response);
-    this.api(response,5.2);
+    this.api(response,this.state.value);
+  }
+
+  handleChange = (response)=>{
+    console.log(response);
+    this.setState({value: response})
   }
 
   
@@ -49,8 +55,8 @@ class App extends React.Component{
       <div>
         <h1>Calcolo</h1>
 
+        <Formula handleChange={this.handleChange}/>
         <Selector handleResponse={this.handleResponse} />
-        <Formula />
         <Result result={this.state.result} />
 
       </div>
