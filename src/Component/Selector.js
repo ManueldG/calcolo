@@ -8,14 +8,16 @@ class Selector extends React.Component {
     }
 
     changeHandler(event){
-        console.log(event);
+        
+        this.props.handleResponse(event.target.value);
+
     }
 
     render() {
         return(
             <div className="selector">
                 <label htmlFor="selector">Scegli funzione</label>
-                <select name="selector" id="selector" value="factor" onChange={this.changeHandler}>
+                <select name="selector" id="selector" value="factor" onChange={(e)=>{this.changeHandler(e)}}>
                     <option value="simplify">Semplifica</option>
                     <option value="factor">Fattori</option>
                     <option value="derive">Derivata</option>

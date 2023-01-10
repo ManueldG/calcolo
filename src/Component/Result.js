@@ -1,8 +1,14 @@
 import React from "react"
 
 class Result extends React.Component {
+
+    
+
     render() {
-        return <div>Risultato</div>
+        return <div>
+            <div>Risultato</div>
+            <div>{this.props.result}</div>
+        </div>
     }
 }
 
