@@ -23,19 +23,29 @@ class App extends React.Component{
 
   
   api = (func, value) => {
-      
-      axios.get('https://newton.now.sh/api/v2/'+func+'/'+value)
+    let val;
+    if(value==="tangent"||value==="simplify"||value==="derive"||value==="integrate"||value==="zeroes"||value==="area")
+      val = encodeURIComponent(value);
+    else val = Number.parseFloat( value).toPrecision(10);
+
+      axios.get('https://newton.now.sh/api/v2/' + func + '/' + val)
     .then( (response) => {
-      const result  = response.data.result;
+      let result  = response.data.result;
+
+      if(Array.isArray(result))
+        if(result[0]!==null)
+          result = "[" + result[0] + "," + result[1] + "]";
+        else
+          result = " --- ";
+      
+
       this.setState({result});
     })
-    .catch(function (error) {
-      // handle error
+    .catch((error)=>{
+      let msg = error.response.data.error;
+      this.setState({result: msg});
       console.log(error);
     });
-    
-
-
   }
 
   handleResponse = (response)=>{
@@ -52,12 +62,16 @@ class App extends React.Component{
 
   render(){
     return (
-      <div>
-        <h1>Calcolo</h1>
+      <div className="form">
+        
+        <div className="content">
 
-        <Formula handleChange={this.handleChange}/>
-        <Selector handleResponse={this.handleResponse} />
-        <Result result={this.state.result} />
+          <h1>Calcolo</h1>
+          <Formula handleChange={this.handleChange}/>
+          <Selector handleResponse={this.handleResponse} />
+          <Result result={this.state.result} />
+
+        </div>
 
       </div>
     )

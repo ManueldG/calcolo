@@ -1,4 +1,5 @@
 import React from 'react';
+import './Selector.css'
 
 class Selector extends React.Component {
     constructor(props){
@@ -17,13 +18,14 @@ class Selector extends React.Component {
         return(
             <div className="selector">
                 <label htmlFor="selector">Scegli funzione</label>
-                <select name="selector" id="selector" value="factor" onChange={(e)=>{this.changeHandler(e)}}>
+                <select name="selector" id="selector"  onChange={(e)=>{this.changeHandler(e)}}>
+                    <option >(scegli)</option>
                     <option value="simplify">Semplifica</option>
                     <option value="factor">Fattori</option>
                     <option value="derive">Derivata</option>
                     <option value="integrate">Integrale</option>
                     <option value="zeroes">ricerca dello zero</option>
-                    <option value="tangent">Tangente</option>
+                    <option value="tangent">Tangente alla curva</option>
                     <option value="area">Area nella curva</option>
                     <option value="cos">Coseno</option>
                     <option value="sin">Seno</option>
