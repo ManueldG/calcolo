@@ -12,21 +12,27 @@ class App extends React.Component{
   constructor(props){
 
     super(props);
-    this.handleResponse = this.handleResponse.bind(this);
-    this.api = this.api.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    //this.api = this.api.bind(this);
     this.state = {
       result:'',  
-      value:''    
+      value:'',
+      func:'',
+      field:0    
     }
 
   }
-
   
   api = (func, value) => {
+
     let val;
-    if(value==="tangent"||value==="simplify"||value==="derive"||value==="integrate"||value==="zeroes"||value==="area")
+    
+    if(func==='simplify'||func==='factor'||func==='derive'||func==='integrate'||func==='zeroes'||func==='tangent'||func==='area'|func==='log')
       val = encodeURIComponent(value);
-    else val = Number.parseFloat( value).toPrecision(10);
+    else 
+      val = Number.parseFloat(value).toPrecision(10);
+
+      console.log("api",'https://newton.now.sh/api/v2/' + func + '/' + val);
 
       axios.get('https://newton.now.sh/api/v2/' + func + '/' + val)
     .then( (response) => {
@@ -49,16 +55,26 @@ class App extends React.Component{
   }
 
   handleResponse = (response)=>{
-    console.log(response);
-    this.api(response,this.state.value);
+    console.log("resp"+response);
+    //this.api(this.state.func,this.state.value);
   }
 
-  handleChange = (response)=>{
-    console.log(response);
-    this.setState({value: response})
+  handleChange = (value)=>{
+    console.log(value);
+    this.setState({value})
+    this.api(this.state.func,value);
   }
 
-  
+  handleChange2 = (func)=>{
+    console.log(func);
+
+    if (func==='log'||func==='area'||func==='area'||func==='tangent')
+    this.setState({field:1});
+  else
+    this.setState({field:0});
+
+    this.setState({func})
+  }  
 
   render(){
     return (
@@ -67,8 +83,8 @@ class App extends React.Component{
         <div className="content">
 
           <h1>Calcolo</h1>
-          <Formula handleChange={this.handleChange}/>
-          <Selector handleResponse={this.handleResponse} />
+          <Selector handleChange2={this.handleChange2} />
+          <Formula field={this.state.field} handleChange={this.handleChange}/>
           <Result result={this.state.result} />
 
         </div>

@@ -10,7 +10,7 @@ class Selector extends React.Component {
 
     changeHandler(event){
         
-        this.props.handleResponse(event.target.value);
+        this.props.handleChange2(event.target.value);
 
     }
 
