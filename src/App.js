@@ -12,8 +12,7 @@ class App extends React.Component{
   constructor(props){
 
     super(props);
-    this.handleChange = this.handleChange.bind(this);
-    //this.api = this.api.bind(this);
+        
     this.state = {
       result:'',  
       value:'',
@@ -29,67 +28,86 @@ class App extends React.Component{
     
     if(func==='simplify'||func==='factor'||func==='derive'||func==='integrate'||func==='zeroes'||func==='tangent'||func==='area'|func==='log')
       val = encodeURIComponent(value);
+
     else 
       val = Number.parseFloat(value).toPrecision(10);
 
-      console.log("api",'https://newton.now.sh/api/v2/' + func + '/' + val);
-
       axios.get('https://newton.now.sh/api/v2/' + func + '/' + val)
     .then( (response) => {
+
       let result  = response.data.result;
 
-      if(Array.isArray(result))
-        if(result[0]!==null)
-          result = "[" + result[0] + "," + result[1] + "]";
-        else
-          result = " --- ";
-      
+      if(Array.isArray(result)){
+
+        let res = "[";
+
+        for(let val in result)
+            res = res + result[val] + ", ";
+
+        res = res.substring(0,res.length-2);
+
+        result = res + "]";
+
+      }
+        
+        
 
       this.setState({result});
     })
     .catch((error)=>{
-      let msg = error.response.data.error;
+
+      let msg = error.response.message;
+
       this.setState({result: msg});
+
       console.log(error);
+
     });
   }
 
-  handleResponse = (response)=>{
-    console.log("resp"+response);
-    //this.api(this.state.func,this.state.value);
-  }
-
   handleChange = (value)=>{
-    console.log(value);
+    
     this.setState({value})
+
     this.api(this.state.func,value);
+
   }
 
   handleChange2 = (func)=>{
-    console.log(func);
+    
+  if (func==='log'||func==='tangent')
+      this.setState({field:1});
 
-    if (func==='log'||func==='area'||func==='area'||func==='tangent')
-    this.setState({field:1});
+  else if (func==='area')
+    this.setState({field:2});
+
   else
-    this.setState({field:0});
+    this.setState({field:0});    
 
-    this.setState({func})
+    this.setState({func});
+
   }  
 
   render(){
+
     return (
+
       <div className="form">
         
         <div className="content">
 
           <h1>Calcolo</h1>
+
           <Selector handleChange2={this.handleChange2} />
+
           <Formula field={this.state.field} handleChange={this.handleChange}/>
+          
           <Result result={this.state.result} />
 
         </div>
 
       </div>
+
     )
     
   }
